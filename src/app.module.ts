@@ -4,6 +4,7 @@ import { LoggerModule } from "nestjs-pino";
 import { default as pinoPretty } from "pino-pretty";
 import { default as env } from "@/common/env";
 import { validationSchema } from "@/common/env.validation";
+import { AppController } from "@/controllers/app.controller";
 
 @Module({
   imports: [
@@ -16,5 +17,6 @@ import { validationSchema } from "@/common/env.validation";
       },
     }),
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

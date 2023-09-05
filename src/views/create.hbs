@@ -1,0 +1,116 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link href="style.css" rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <title>Create New Scraper</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+          <div class="position-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="/"> Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/create"> Create New </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/scrapers"> Scrapers </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/jobs"> Cron Jobs </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <div class="container">
+            <h2>Create New Scraper</h2>
+            <div class="container">
+              <h1>Scraper Configuration Form</h1>
+              <form id="configForm">
+                <div class="mb-3">
+                  <label for="name" class="form-label">Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="base" class="form-label">Base</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="base"
+                    name="base"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="favicon" class="form-label">Favicon</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="favicon"
+                    name="favicon"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="roots" class="form-label">Roots</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="roots"
+                    name="roots"
+                    required
+                  />
+                  <small class="form-text text-muted">Comma-separated values for
+                    the "roots" array.</small>
+                </div>
+                <div class="mb-3">
+                  <label for="linkType" class="form-label">Link Type</label>
+                  <select
+                    class="form-select"
+                    id="linkType"
+                    name="linkType"
+                    required
+                  >
+                    <option value="text">Text</option>
+                    <option value="html">HTML</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="removeList" class="form-label">Remove List</label>
+                  <ul id="removeList"></ul>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="addRemoveItem"
+                  >
+                    Add Item
+                  </button>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+    ></script>
+    <script src="create.js"></script>
+  </body>
+</html>

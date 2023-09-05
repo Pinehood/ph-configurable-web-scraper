@@ -12,6 +12,11 @@
           "introspectComments": true
         }
       }
-    ]
+    ],
+    "assets": [
+      { "include": "**/views/*.hbs" },
+      { "include": "**/public/*.{css,jpg,jpeg,png,ico,svg,js}" }
+    ],
+    "watchAssets": true
   }
 }
