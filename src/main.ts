@@ -3,7 +3,7 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 import { Logger } from "nestjs-pino";
 import { AppModule } from "@/app.module";
-import { CommonConstants, SwaggerConstants } from "@/common";
+import { CommonConstants, SwaggerConstants } from "@/common/enums";
 
 (async function () {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });

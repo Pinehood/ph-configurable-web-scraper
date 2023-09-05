@@ -19,9 +19,25 @@ export type LinkExtractor = {
 export type ContentExtractor = {
   property: string;
   selector: string;
+  transfomers?: ContentTransfomer[];
   remove?: string[];
   type?: "text" | "html";
   take?: "first" | "last" | "normal";
+};
+
+export type ContentTransfomer = {
+  type:
+    | "replace"
+    | "substring"
+    | "split"
+    | "trim"
+    | "uppercase"
+    | "lowercase"
+    | "slice"
+    | "padEnd"
+    | "padStart";
+  valueOne?: string | number;
+  valueTwo?: string | number;
 };
 
 export type FetchDetails = {

@@ -47,11 +47,36 @@ const DnevnoConfig: ScraperConfig = {
   scrape: [
     { property: "title", selector: "h1" },
     { property: "lead", selector: "a.title" },
-    { property: "time", selector: "time.date", take: "first", type: "text" },
+    {
+      property: "time",
+      selector: "time.date",
+      take: "first",
+      type: "text",
+      transfomers: [
+        {
+          type: "split",
+          valueOne: ",",
+          valueTwo: 1,
+        },
+        {
+          type: "trim",
+        },
+      ],
+    },
     {
       property: "author",
       selector: "span.author",
       take: "first",
+      transformers: [
+        {
+          type: "split",
+          valueOne: "Autor:",
+          valueTwo: 1,
+        },
+        {
+          type: "trim",
+        },
+      ],
     },
     {
       remove: [
