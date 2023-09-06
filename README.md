@@ -55,8 +55,8 @@ const DnevnoConfig: ScraperConfig = {
       transfomers: [
         {
           type: "split",
-          valueOne: ",",
-          valueTwo: 1,
+          value: ",",
+          index: 1,
         },
         {
           type: "trim",
@@ -70,8 +70,8 @@ const DnevnoConfig: ScraperConfig = {
       transformers: [
         {
           type: "split",
-          valueOne: "Autor:",
-          valueTwo: 1,
+          value: "Autor:",
+          index: 1,
         },
         {
           type: "trim",
@@ -92,5 +92,13 @@ const DnevnoConfig: ScraperConfig = {
       type: "html",
     },
   ],
+  submit: {
+    type: "request",
+    url: "https://my-upload-endpoint.whatever.com/api/upload",
+    method: "POST",
+    headers: {
+      "X-Whatever-Header": "test123",
+    },
+  },
 };
 ```

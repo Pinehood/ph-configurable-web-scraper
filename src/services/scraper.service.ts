@@ -1,8 +1,10 @@
 import * as cheerio from "cheerio";
+import * as fs from "fs";
 import { AxiosResponse } from "axios";
 import axios from "@/common/axios";
 import {
   FetchDetails,
+  ContentSubmitter,
   ScrapedContent,
   ScrapedContentEntry,
   ScraperConfig,
@@ -13,10 +15,11 @@ import { TransformService } from "@/services/transform.service";
 export class ScraperService {
   static async scrape(config: ScraperConfig): Promise<ScrapedContent> {
     try {
+      const start = new Date().getTime();
       const content: ScrapedContentEntry[] = [];
       for (let i = 0; i < config.roots.length; i++) {
         const root = config.roots[i];
-        const rootResponse = await ScraperService.response(
+        const rootResponse = await ScraperService.request(
           root,
           config.links.fetching,
         );
@@ -53,20 +56,28 @@ export class ScraperService {
           content.push(entry);
         }
       }
-      return {
+      const end = new Date().getTime();
+      const scrapedContent: ScrapedContent = {
         scraper: {
           name: config.name,
           base: config.base,
           favicon: config.favicon,
         },
+        stats: {
+          amount: content.length,
+          start,
+          end,
+        },
         content,
       };
+      ScraperService.submit(config.submit, scrapedContent);
+      return scrapedContent;
     } catch {
       return null;
     }
   }
 
-  private static response(
+  private static request(
     url: string,
     fetching: FetchDetails,
   ): Promise<AxiosResponse<any, any>> {
@@ -82,6 +93,26 @@ export class ScraperService {
       return axios.put(url, fetching.body, {
         headers: fetching.headers,
       });
+    }
+  }
+
+  private static submit(
+    submitter: ContentSubmitter,
+    content: ScrapedContent,
+  ): Promise<void> {
+    try {
+      if (submitter.type == "request") {
+        axios.request({
+          method: submitter.method,
+          url: submitter.url,
+          headers: submitter.headers,
+          data: content,
+        });
+      } else if (submitter.type == "file") {
+        fs.writeFileSync(submitter.destination, JSON.stringify(content));
+      }
+    } catch {
+      return;
     }
   }
 }

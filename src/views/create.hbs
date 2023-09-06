@@ -32,12 +32,11 @@
         </nav>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div class="container">
-            <h2>Create New Scraper</h2>
             <div class="container">
               <h1>Scraper Configuration Form</h1>
               <form id="configForm">
                 <div class="mb-3">
-                  <label for="name" class="form-label">Name</label>
+                  <label for="name" class="form-label">Scraper Name</label>
                   <input
                     type="text"
                     class="form-control"
@@ -47,7 +46,7 @@
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="base" class="form-label">Base</label>
+                  <label for="base" class="form-label">Base URL</label>
                   <input
                     type="text"
                     class="form-control"
@@ -67,7 +66,7 @@
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="roots" class="form-label">Roots</label>
+                  <label for="roots" class="form-label">Root Links</label>
                   <input
                     type="text"
                     class="form-control"
@@ -91,7 +90,8 @@
                   </select>
                 </div>
                 <div class="mb-3">
-                  <label for="removeList" class="form-label">Remove List</label>
+                  <label for="removeList" class="form-label">Element Removal
+                    List</label>
                   <ul id="removeList"></ul>
                   <button
                     type="button"

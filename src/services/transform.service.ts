@@ -24,18 +24,13 @@ export class TransformService {
         extractor.transfomers.forEach((transformer) => {
           if (transformer.type == "replace") {
             finalValue = finalValue.replace(
-              new RegExp(transformer.valueOne as string, "g"),
-              transformer.valueTwo as string,
+              new RegExp(transformer.what, "g"),
+              transformer.with,
             );
           } else if (transformer.type == "substring") {
-            finalValue = finalValue.substring(
-              transformer.valueOne as number,
-              transformer.valueTwo as number,
-            );
+            finalValue = finalValue.substring(transformer.from, transformer.to);
           } else if (transformer.type == "split") {
-            finalValue = finalValue.split(transformer.valueOne as string)[
-              transformer.valueTwo as number
-            ];
+            finalValue = finalValue.split(transformer.value)[transformer.index];
           } else if (transformer.type == "trim") {
             finalValue = finalValue.trim();
           } else if (transformer.type == "uppercase") {
@@ -43,19 +38,16 @@ export class TransformService {
           } else if (transformer.type == "lowercase") {
             finalValue = finalValue.toLowerCase();
           } else if (transformer.type == "slice") {
-            finalValue = finalValue.slice(
-              transformer.valueOne as number,
-              transformer.valueTwo as number,
-            );
+            finalValue = finalValue.slice(transformer.from, transformer.to);
           } else if (transformer.type == "padEnd") {
             finalValue = finalValue.padEnd(
-              transformer.valueOne as number,
-              transformer.valueTwo as string,
+              transformer.index,
+              transformer.value,
             );
           } else if (transformer.type == "padStart") {
             finalValue = finalValue.padStart(
-              transformer.valueOne as number,
-              transformer.valueTwo as string,
+              transformer.index,
+              transformer.value,
             );
           }
         });

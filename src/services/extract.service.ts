@@ -10,19 +10,19 @@ export class ExtractService {
       if (config.links.type == "text") {
         links.push(
           ...data
-            .match(config.links.selector as RegExp)
+            .match(config.links.selector)
             .map((link) => TransformService.link(link, config)),
         );
       } else if (config.links.type == "html") {
         const $ = cheerio.load(data);
-        $(config.links.selector as string).each((_, el) => {
+        $(config.links.selector).each((_, el) => {
           const link = TransformService.link($(el).attr("href"), config);
           if (links.findIndex((el) => el == link) == -1) {
             links.push(link);
           }
         });
       } else if (config.links.type == "json") {
-        const selector = config.links.selector as string;
+        const selector = config.links.selector;
         const json = JSON.parse(data) as any;
         links.push(...jsonpath.query(json, selector));
       }

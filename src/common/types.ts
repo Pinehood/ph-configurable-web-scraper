@@ -1,22 +1,20 @@
 import { AxiosHeaders } from "axios";
 
-export type ScraperConfig = {
-  name: string;
-  base: string;
-  favicon: string;
-  roots: string[];
-  links: LinkExtractor;
-  remove: string[];
-  scrape: ContentExtractor[];
-};
-
-export type LinkExtractor = {
+type BaseLinkExtractor = {
   fetching: FetchDetails;
-  type: "text" | "html" | "json";
-  selector: string | RegExp;
 };
 
-export type ContentExtractor = {
+type RegexLinkExtractor = {
+  type: "text";
+  selector: RegExp;
+};
+
+type NormalLinkExtractor = {
+  type: "html" | "json";
+  selector: string;
+};
+
+type ContentExtractor = {
   property: string;
   selector: string;
   transfomers?: ContentTransfomer[];
@@ -25,42 +23,97 @@ export type ContentExtractor = {
   take?: "first" | "last" | "normal";
 };
 
-export type ContentTransfomer = {
-  type:
-    | "replace"
-    | "substring"
-    | "split"
-    | "trim"
-    | "uppercase"
-    | "lowercase"
-    | "slice"
-    | "padEnd"
-    | "padStart";
-  valueOne?: string | number;
-  valueTwo?: string | number;
+type SimpleContentTransfomer = {
+  type: "trim" | "uppercase" | "lowercase";
 };
 
-export type FetchDetails = {
-  method: "GET" | "POST" | "PUT";
-  body?: any;
+type NumericContentTransformer = {
+  type: "substring" | "slice";
+  from: number;
+  to: number;
+};
+
+type StringContentTransfomer = {
+  type: "replace";
+  what: string;
+  with: string;
+};
+
+type CombinedContentTransfomer = {
+  type: "split" | "padEnd" | "padStart";
+  index: number;
+  value: string;
+};
+
+type FileContentSubmitter = {
+  type: "file";
+  destination: string;
+};
+
+type RequestContentSubmitter = {
+  type: "request";
+  url: string;
+  method: "POST" | "PUT";
   headers?: AxiosHeaders;
 };
 
-export type ScrapedContent = {
+type FetchDetails = {
+  method: "GET" | "POST" | "PUT";
+  headers?: AxiosHeaders;
+  body?: any;
+};
+
+type LinkExtractor = BaseLinkExtractor &
+  (RegexLinkExtractor | NormalLinkExtractor);
+
+type ContentTransfomer =
+  | SimpleContentTransfomer
+  | NumericContentTransformer
+  | StringContentTransfomer
+  | CombinedContentTransfomer;
+
+type ContentSubmitter = FileContentSubmitter | RequestContentSubmitter;
+
+type ScraperConfig = {
+  name: string;
+  base: string;
+  favicon: string;
+  roots: string[];
+  links: LinkExtractor;
+  remove: string[];
+  scrape: ContentExtractor[];
+  submit: ContentSubmitter;
+};
+
+type ScrapedContent = {
   scraper: {
     name: string;
     base: string;
     favicon: string;
   };
+  stats: {
+    amount: number;
+    start: number;
+    end: number;
+  };
   content: ScrapedContentEntry[];
 };
 
-export type ScrapedContentEntry = {
+type ScrapedContentEntry = {
   from: string;
   values: ScrapedContentEntryValue[];
 };
 
-export type ScrapedContentEntryValue = {
+type ScrapedContentEntryValue = {
   property: string;
   value: string;
+};
+
+export {
+  ContentExtractor,
+  ContentSubmitter,
+  FetchDetails,
+  ScrapedContent,
+  ScrapedContentEntry,
+  ScraperConfig,
 };
