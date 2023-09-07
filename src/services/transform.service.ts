@@ -1,4 +1,4 @@
-import { ContentExtractor, ScraperConfig } from "@/common/types";
+import { ContentTransfomer, ScraperConfig } from "@/common/types";
 
 export class TransformService {
   static link(link: string, config: ScraperConfig): string {
@@ -17,14 +17,16 @@ export class TransformService {
     }
   }
 
-  static content(value: string, extractor: ContentExtractor): string {
+  static content(value: string, transfomers?: ContentTransfomer[]): string {
     try {
       let finalValue = value;
-      if (extractor.transfomers) {
-        extractor.transfomers.forEach((transformer) => {
+      if (transfomers && transfomers.length > 0) {
+        transfomers.forEach((transformer) => {
           if (transformer.type == "replace") {
             finalValue = finalValue.replace(
-              new RegExp(transformer.what, "g"),
+              transformer.occurence == "first"
+                ? transformer.what
+                : new RegExp(transformer.what, "g"),
               transformer.with,
             );
           } else if (transformer.type == "substring") {

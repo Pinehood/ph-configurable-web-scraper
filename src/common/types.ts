@@ -35,6 +35,7 @@ type NumericContentTransformer = {
 
 type StringContentTransfomer = {
   type: "replace";
+  occurence: "first" | "all";
   what: string;
   with: string;
 };
@@ -109,9 +110,23 @@ type ScrapedContentEntryValue = {
   value: string;
 };
 
+type CronJobMeta = {
+  scraper: string;
+  name: string;
+  expression: string;
+};
+
+type DataStorage = {
+  scrapers: ScraperConfig[];
+  jobs: CronJobMeta[];
+};
+
 export {
   ContentExtractor,
   ContentSubmitter,
+  ContentTransfomer,
+  CronJobMeta,
+  DataStorage,
   FetchDetails,
   ScrapedContent,
   ScrapedContentEntry,

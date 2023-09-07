@@ -23,11 +23,11 @@ export class ScraperService {
           root,
           config.links.fetching,
         );
-        if (!rootResponse || rootResponse.data) return null;
+        if (!rootResponse || rootResponse.data) continue;
 
         const data = rootResponse.data as string;
         const links = ExtractService.links(data, config);
-        if (!links || links.length <= 0) return null;
+        if (!links || links.length <= 0) continue;
 
         for (let i = 0; i < links.length; i++) {
           const link = links[i];
@@ -36,7 +36,7 @@ export class ScraperService {
             values: [],
           };
           const linkResponse = await axios.get(link);
-          if (!linkResponse || !linkResponse.data) return null;
+          if (!linkResponse || !linkResponse.data) continue;
 
           const page = linkResponse.data as string;
           const $ = cheerio.load(page);
@@ -49,7 +49,7 @@ export class ScraperService {
               property: extractor.property,
               value: TransformService.content(
                 ExtractService.content($, extractor),
-                extractor,
+                extractor.transfomers,
               ),
             });
           });
