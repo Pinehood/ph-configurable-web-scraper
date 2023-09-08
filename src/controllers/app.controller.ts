@@ -1,4 +1,5 @@
 import { Controller, Get, Render } from "@nestjs/common";
+import { CronExpression } from "@nestjs/schedule";
 
 @Controller()
 export class AppController {
@@ -11,7 +12,15 @@ export class AppController {
   @Get("/create")
   @Render("create")
   create() {
-    return {};
+    return {
+      options: Object.keys(CronExpression).map((k) => {
+        return `
+          <option value="${CronExpression[k]}">
+            ${k.replace(/\_/g, " ")}
+          </option>
+        `;
+      }),
+    };
   }
 
   @Get("/jobs")

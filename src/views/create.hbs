@@ -11,7 +11,7 @@
   </head>
   <body>
     <div class="container-fluid">
-      <div class="row">
+      <div class="row h-100">
         <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
           <div class="position-sticky">
             <ul class="nav flex-column">
@@ -33,73 +33,28 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div class="container">
             <div class="container">
-              <h1>Scraper Configuration Form</h1>
-              <form id="configForm">
+              <h1>Scraper Configuration JSON</h1>
+              <form id="form">
                 <div class="mb-3">
-                  <label for="name" class="form-label">Scraper Name</label>
-                  <input
-                    type="text"
+                  <label for="config" class="form-label">JSON</label>
+                  <textarea
                     class="form-control"
-                    id="name"
-                    name="name"
-                    required
-                  />
+                    id="json"
+                    name="json"
+                    rows="24"
+                    required="true"
+                  ></textarea>
                 </div>
                 <div class="mb-3">
-                  <label for="base" class="form-label">Base URL</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="base"
-                    name="base"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="favicon" class="form-label">Favicon</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="favicon"
-                    name="favicon"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="roots" class="form-label">Root Links</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="roots"
-                    name="roots"
-                    required
-                  />
-                  <small class="form-text text-muted">Comma-separated values for
-                    the "roots" array.</small>
-                </div>
-                <div class="mb-3">
-                  <label for="linkType" class="form-label">Link Type</label>
+                  <label for="job" class="form-label">Cron Job</label>
                   <select
                     class="form-select"
-                    id="linkType"
-                    name="linkType"
-                    required
+                    id="cron"
+                    name="cron"
+                    required="true"
                   >
-                    <option value="text">Text</option>
-                    <option value="html">HTML</option>
+                    {{{options}}}
                   </select>
-                </div>
-                <div class="mb-3">
-                  <label for="removeList" class="form-label">Element Removal
-                    List</label>
-                  <ul id="removeList"></ul>
-                  <button
-                    type="button"
-                    class="btn btn-primary"
-                    id="addRemoveItem"
-                  >
-                    Add Item
-                  </button>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
