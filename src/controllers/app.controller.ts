@@ -1,15 +1,15 @@
 import { Controller, Get, Render } from "@nestjs/common";
 import { CronExpression } from "@nestjs/schedule";
 
-@Controller()
+@Controller("/app")
 export class AppController {
-  @Get()
+  @Get(["", "home"])
   @Render("index")
   index() {
     return {};
   }
 
-  @Get("/create")
+  @Get("create")
   @Render("create")
   create() {
     return {
@@ -23,13 +23,13 @@ export class AppController {
     };
   }
 
-  @Get("/jobs")
+  @Get("jobs")
   @Render("jobs")
   jobs() {
     return {};
   }
 
-  @Get("/scrapers")
+  @Get("scrapers")
   @Render("scrapers")
   scrapers() {
     return {};
