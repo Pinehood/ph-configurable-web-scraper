@@ -19,7 +19,7 @@ jobs:
       - name: Install
         run: npm ci
       - name: Build
-        run: npm run build
+        run: npm run build:swc
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
       - name: Lint
