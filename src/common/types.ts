@@ -98,6 +98,7 @@ type ScrapedContent = {
     end: number;
   };
   content: ScrapedContentEntry[];
+  submitted: boolean;
 };
 
 type ScrapedContentEntry = {
@@ -116,12 +117,27 @@ type CronJobMeta = {
   expression: string;
 };
 
+type ScraperHistory = {
+  scraper: string;
+  date: Date;
+  amount: number;
+  duration: number;
+  success: boolean;
+  submitted: boolean;
+};
+
 type DataStorage = {
   scrapers: ScraperConfig[];
   jobs: CronJobMeta[];
+  history: ScraperHistory[];
 };
 
+type CollectionChangeAction = "add" | "update" | "remove";
+type CollectionClearWhat = "scrapers+jobs" | "history";
+
 export {
+  CollectionChangeAction,
+  CollectionClearWhat,
   ContentExtractor,
   ContentSubmitter,
   ContentTransfomer,
@@ -131,4 +147,5 @@ export {
   ScrapedContent,
   ScrapedContentEntry,
   ScraperConfig,
+  ScraperHistory,
 };

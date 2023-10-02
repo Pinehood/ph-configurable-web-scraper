@@ -1,10 +1,17 @@
 import * as fs from "fs";
-import { CronJobMeta, DataStorage, ScraperConfig } from "@/common";
+import {
+  CollectionChangeAction,
+  CollectionClearWhat,
+  CronJobMeta,
+  DataStorage,
+  ScraperConfig,
+} from "@/common";
 import { default as storageDir } from "@/storage/index";
 
 let DATA_STORAGE: DataStorage = {
   jobs: [],
   scrapers: [],
+  history: [],
 };
 
 export class StorageService {
@@ -15,15 +22,23 @@ export class StorageService {
   }
 
   static scraper(
-    action: "add" | "update" | "remove",
+    action: CollectionChangeAction,
     scraper: ScraperConfig | string,
   ): boolean {
     try {
       if (action == "add" && typeof scraper == "object") {
+        if (
+          DATA_STORAGE.scrapers.findIndex((s) => s.name == scraper.name) > -1
+        ) {
+          return false;
+        }
         DATA_STORAGE.scrapers.push(scraper);
       } else if (action == "remove" && typeof scraper == "string") {
         DATA_STORAGE.scrapers = DATA_STORAGE.scrapers.filter(
           (s) => s.name != scraper,
+        );
+        DATA_STORAGE.jobs = DATA_STORAGE.jobs.filter(
+          (j) => j.scraper != scraper,
         );
       } else if (action == "update" && typeof scraper == "object") {
         const idx = DATA_STORAGE.scrapers.findIndex(
@@ -38,11 +53,14 @@ export class StorageService {
   }
 
   static job(
-    action: "add" | "update" | "remove",
+    action: CollectionChangeAction,
     job: CronJobMeta | string,
   ): boolean {
     try {
       if (action == "add" && typeof job == "object") {
+        if (DATA_STORAGE.jobs.findIndex((j) => j.name == job.name) > -1) {
+          return false;
+        }
         DATA_STORAGE.jobs.push(job);
       } else if (action == "remove" && typeof job == "string") {
         DATA_STORAGE.jobs = DATA_STORAGE.jobs.filter((s) => s.name != job);
@@ -53,6 +71,38 @@ export class StorageService {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  static history(
+    scraper: string,
+    date: Date,
+    amount: number,
+    duration: number,
+    success: boolean,
+    submitted: boolean,
+  ): boolean {
+    try {
+      DATA_STORAGE.history.push({
+        scraper,
+        date,
+        amount,
+        duration,
+        success,
+        submitted,
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  static clear(what: CollectionClearWhat): void {
+    if (what == "scrapers+jobs") {
+      DATA_STORAGE.scrapers = [];
+      DATA_STORAGE.jobs = [];
+    } else if (what == "history") {
+      DATA_STORAGE.history = [];
     }
   }
 
@@ -67,6 +117,7 @@ export class StorageService {
       DATA_STORAGE = {
         jobs: [],
         scrapers: [],
+        history: [],
       };
       return false;
     }
@@ -92,6 +143,7 @@ export class StorageService {
           JSON.stringify({
             jobs: [],
             scrapers: [],
+            history: [],
           }),
         );
       }

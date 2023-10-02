@@ -69,11 +69,28 @@ export class ScraperService {
           end,
         },
         content,
+        submitted: false,
       };
-      ScraperService.submit(config.submit, scrapedContent);
+      scrapedContent.submitted = await ScraperService.submit(
+        config.submit,
+        scrapedContent,
+      );
       return scrapedContent;
     } catch {
-      return null;
+      return {
+        scraper: {
+          name: config.name,
+          base: config.base,
+          favicon: config.favicon,
+        },
+        stats: {
+          amount: 0,
+          start: 0,
+          end: 0,
+        },
+        content: [],
+        submitted: false,
+      };
     }
   }
 
@@ -96,23 +113,26 @@ export class ScraperService {
     }
   }
 
-  private static submit(
+  private static async submit(
     submitter: ContentSubmitter,
     content: ScrapedContent,
-  ): Promise<void> {
+  ): Promise<boolean> {
     try {
       if (submitter.type == "request") {
-        axios.request({
+        const response = await axios.request({
           method: submitter.method,
           url: submitter.url,
           headers: submitter.headers,
           data: content,
         });
+        return response.status.toString().startsWith("2");
       } else if (submitter.type == "file") {
         fs.writeFileSync(submitter.destination, JSON.stringify(content));
+        return true;
       }
+      return false;
     } catch {
-      return;
+      return false;
     }
   }
 }

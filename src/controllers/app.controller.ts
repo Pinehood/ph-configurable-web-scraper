@@ -1,37 +1,77 @@
+import { AppRoutes, HISTORY, JOB, OPTION, SCRAPER, Views } from "@/common";
+import { StorageService } from "@/services";
 import { Controller, Get, Render } from "@nestjs/common";
-import { CronExpression } from "@nestjs/schedule";
+import { CronExpression, SchedulerRegistry } from "@nestjs/schedule";
 
-@Controller("/app")
+@Controller(AppRoutes.BASE)
 export class AppController {
-  @Get(["", "home"])
-  @Render("index")
+  constructor(private readonly schedulerRegistry: SchedulerRegistry) {}
+
+  @Get(["", AppRoutes.HOME])
+  @Render(Views.HOME)
   index() {
     return {};
   }
 
-  @Get("create")
-  @Render("create")
+  @Get(AppRoutes.CREATE)
+  @Render(Views.CREATE)
   create() {
     return {
-      options: Object.keys(CronExpression).map((k) => {
-        return `
-          <option value="${CronExpression[k]}">
-            ${k.replace(/\_/g, " ")}
-          </option>
-        `;
-      }),
+      options: Object.keys(CronExpression)
+        .map((k) => OPTION(k.replace(/\_/g, " "), CronExpression[k]))
+        .join(" "),
     };
   }
 
-  @Get("jobs")
-  @Render("jobs")
+  @Get(AppRoutes.JOBS)
+  @Render(Views.JOBS)
   jobs() {
-    return {};
+    const data = StorageService.data();
+    return {
+      rows: data.jobs
+        .map((j, i) => {
+          const job = this.schedulerRegistry.doesExist("cron", j.name)
+            ? this.schedulerRegistry.getCronJob(j.name)
+            : null;
+          const status = job
+            ? job.running == true
+              ? "running"
+              : "stopped"
+            : "unknown";
+          return JOB(j, i, status);
+        })
+        .join(" "),
+    };
   }
 
-  @Get("scrapers")
-  @Render("scrapers")
+  @Get(AppRoutes.SCRAPERS)
+  @Render(Views.SCRAPERS)
   scrapers() {
-    return {};
+    const data = StorageService.data();
+    return {
+      rows: data.scrapers
+        .map((s, i) => {
+          const expression = data.jobs.find(
+            (j) => j.scraper == s.name,
+          ).expression;
+          let schedule = "unknown";
+          Object.keys(CronExpression).forEach((k) => {
+            if (CronExpression[k] == expression) {
+              schedule = k.replace(/_/g, " ").toLowerCase();
+            }
+          });
+          return SCRAPER(s, i, schedule);
+        })
+        .join(" "),
+    };
+  }
+
+  @Get(AppRoutes.HISTORY)
+  @Render(Views.HISTORY)
+  history() {
+    const data = StorageService.data();
+    return {
+      rows: data.history.map((h, i) => HISTORY(h, i)).join(" "),
+    };
   }
 }

@@ -2,7 +2,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link href="style.css" rel="stylesheet" />
+    <link href="/style.css" rel="stylesheet" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -27,18 +27,85 @@
               <li class="nav-item">
                 <a class="nav-link" href="/app/jobs"> Cron Jobs </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/app/history"> Execution History </a>
+              </li>
             </ul>
           </div>
         </nav>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div class="container">
+            <div
+              id="alert-success"
+              class="alert alert-success"
+              role="alert"
+              hidden="true"
+            >
+              Scraper deleted successfully, wait for page reload!
+            </div>
+            <div
+              id="alert-danger"
+              class="alert alert-danger"
+              role="alert"
+              hidden="true"
+            >
+              Scraper deletion failed!
+            </div>
             <h2>View Created Scrapers</h2>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">URL</th>
+                  <th scope="col">Schedule</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{{rows}}}
+              </tbody>
+            </table>
           </div>
         </main>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="modal"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Scraper JSON configuration</h5>
+            <button
+              type="button"
+              class="close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <textarea
+              id="json"
+              name="json"
+              rows="24"
+              cols="60"
+              readonly="true"
+            ></textarea>
+          </div>
+        </div>
       </div>
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
     ></script>
+    <script src="/base.js"></script>
+    <script src="/scrapers.js"></script>
   </body>
 </html>
