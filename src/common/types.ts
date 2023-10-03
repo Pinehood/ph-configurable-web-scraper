@@ -129,7 +129,6 @@ type ScraperHistory = {
 type DataStorage = {
   scrapers: ScraperConfig[];
   jobs: CronJobMeta[];
-  history: ScraperHistory[];
 };
 
 type CollectionChangeAction = "add" | "update" | "remove";

@@ -72,7 +72,7 @@ export class CronService {
       this.schedulerRegistry.addCronJob(job.name, cronJob);
       cronJob.start();
       this.logger.info(
-        "Started cron job %s for scraper %s",
+        "Started cron job '%s' for scraper '%s'",
         job.name,
         job.scraper,
       );
@@ -86,7 +86,7 @@ export class CronService {
       const scraped = await ScraperService.scrape(config);
       if (scraped) {
         this.logger.info(
-          "%s scraped content amount %d in %d seconds",
+          "'%s' scraped content amount '%d' in '%d' seconds",
           scraped.scraper.name,
           scraped.stats.amount,
           (scraped.stats.end - scraped.stats.start) / 1000,

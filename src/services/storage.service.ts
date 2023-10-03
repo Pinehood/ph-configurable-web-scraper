@@ -5,20 +5,27 @@ import {
   CronJobMeta,
   DataStorage,
   ScraperConfig,
+  ScraperHistory,
 } from "@/common";
 import { default as storageDir } from "@/storage/index";
 
 let DATA_STORAGE: DataStorage = {
   jobs: [],
   scrapers: [],
-  history: [],
 };
 
+let HISTORY_STORAGE: ScraperHistory[] = [];
+
 export class StorageService {
-  private static filename = `${storageDir()}/data.json`;
+  private static dataFilename = `${storageDir()}/data.json`;
+  private static historyFilename = `${storageDir()}/history.json`;
 
   static data(): DataStorage {
     return { ...DATA_STORAGE };
+  }
+
+  static histories(): ScraperHistory[] {
+    return [...HISTORY_STORAGE];
   }
 
   static scraper(
@@ -83,7 +90,7 @@ export class StorageService {
     submitted: boolean,
   ): boolean {
     try {
-      DATA_STORAGE.history.push({
+      HISTORY_STORAGE.push({
         scraper,
         date,
         amount,
@@ -102,7 +109,7 @@ export class StorageService {
       DATA_STORAGE.scrapers = [];
       DATA_STORAGE.jobs = [];
     } else if (what == "history") {
-      DATA_STORAGE.history = [];
+      HISTORY_STORAGE = [];
     }
   }
 
@@ -110,15 +117,18 @@ export class StorageService {
     try {
       StorageService.check();
       DATA_STORAGE = JSON.parse(
-        fs.readFileSync(StorageService.filename).toString(),
+        fs.readFileSync(StorageService.dataFilename).toString(),
       ) as DataStorage;
+      HISTORY_STORAGE = JSON.parse(
+        fs.readFileSync(StorageService.historyFilename).toString(),
+      ) as ScraperHistory[];
       return true;
     } catch {
       DATA_STORAGE = {
         jobs: [],
         scrapers: [],
-        history: [],
       };
+      HISTORY_STORAGE = [];
       return false;
     }
   }
@@ -126,8 +136,12 @@ export class StorageService {
   static save(): boolean {
     try {
       fs.writeFileSync(
-        StorageService.filename,
+        StorageService.dataFilename,
         JSON.stringify({ ...DATA_STORAGE }),
+      );
+      fs.writeFileSync(
+        StorageService.historyFilename,
+        JSON.stringify([...HISTORY_STORAGE]),
       );
       return true;
     } catch {
@@ -137,15 +151,18 @@ export class StorageService {
 
   private static check(): boolean {
     try {
-      if (!fs.existsSync(StorageService.filename)) {
+      if (!fs.existsSync(StorageService.dataFilename)) {
         fs.writeFileSync(
-          StorageService.filename,
+          StorageService.dataFilename,
           JSON.stringify({
             jobs: [],
             scrapers: [],
             history: [],
           }),
         );
+      }
+      if (!fs.existsSync(StorageService.historyFilename)) {
+        fs.writeFileSync(StorageService.historyFilename, JSON.stringify([]));
       }
       return true;
     } catch {

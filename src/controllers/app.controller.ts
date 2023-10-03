@@ -69,9 +69,9 @@ export class AppController {
   @Get(AppRoutes.HISTORY)
   @Render(Views.HISTORY)
   history() {
-    const data = StorageService.data();
+    const data = StorageService.histories();
     return {
-      rows: data.history.map((h, i) => HISTORY(h, i)).join(" "),
+      rows: data.map((h, i) => HISTORY(h, i)).join(" "),
     };
   }
 }
