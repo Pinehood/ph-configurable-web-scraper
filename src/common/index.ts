@@ -3,5 +3,7 @@ export * from "./enums";
 export * from "./env";
 export * from "./env.validation";
 export * from "./fragments";
+export * from "./functions";
+export * from "./key.guard";
 export * from "./routes";
 export * from "./types";

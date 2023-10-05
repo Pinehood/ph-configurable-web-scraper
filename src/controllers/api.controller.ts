@@ -7,11 +7,13 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from "@nestjs/common";
 import { SchedulerRegistry } from "@nestjs/schedule";
 import {
   ApiRoutes,
   CommonConstants,
+  KeyGuard,
   PathParams,
   ScraperConfig,
 } from "@/common";
@@ -27,6 +29,7 @@ export class ApiController {
   }
 
   @Post(ApiRoutes.SCRAPER_LIST)
+  @UseGuards(KeyGuard)
   createScraper(@Body() body: any): void {
     const cron = body.cron;
     delete body.cron;
@@ -47,6 +50,7 @@ export class ApiController {
   }
 
   @Delete(ApiRoutes.SCRAPER_SINGLE)
+  @UseGuards(KeyGuard)
   deleteScraper(@Param(PathParams.NAME) name: string): void {
     if (StorageService.scraper("remove", name) == true) {
       StorageService.save();
@@ -56,11 +60,13 @@ export class ApiController {
   }
 
   @Delete(ApiRoutes.HISTORY)
+  @UseGuards(KeyGuard)
   deleteHistory(): void {
     StorageService.clear("history");
   }
 
   @Put(ApiRoutes.JOB)
+  @UseGuards(KeyGuard)
   startJob(@Param(PathParams.NAME) name: string): void {
     try {
       const job = this.schedulerRegistry.getCronJob(name);
@@ -73,6 +79,7 @@ export class ApiController {
   }
 
   @Delete(ApiRoutes.JOB)
+  @UseGuards(KeyGuard)
   stopJob(@Param(PathParams.NAME) name: string): void {
     try {
       const job = this.schedulerRegistry.getCronJob(name);

@@ -17,6 +17,9 @@ async function getConfig(name) {
 async function deleteScraper(name) {
   const response = await fetch(`/api/scraper/${encodeURIComponent(name)}`, {
     method: "DELETE",
+    headers: {
+      "X-Secret-Key": localStorage.getItem("sk"),
+    },
   });
   if (response && response.status == 200) {
     showHideAlert("alert-success");

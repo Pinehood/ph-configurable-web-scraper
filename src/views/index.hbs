@@ -42,6 +42,46 @@
                 href="https://github.com/Pinehood/ph-configurable-web-scraper"
                 target="_blank"
               >here</a>!</p>
+            <br />
+            <p>
+              In order to perform non-read actions on the available resources,
+              you'd need to input one out of the four possible secret keys, to
+              get access to these same actions. This key will be saved in local
+              storage, for future usages in various requests. Minimum level
+              security for the win!
+            </p>
+            <div
+              id="alert-success"
+              class="alert alert-success"
+              role="alert"
+              hidden="true"
+            >
+              Key saved successfully!
+            </div>
+            <div
+              style="
+                display: inline-flex;
+                flex: content;
+                justify-content: space-between;
+              "
+            >
+              <p>Key:&nbsp;</p>
+              <input
+                type="password"
+                class="form-control"
+                style="height: 32px"
+                id="secret_key"
+              />
+              <span>&nbsp;</span>
+              <button
+                type="button"
+                class="btn btn-primary"
+                style="height: 32px"
+                onclick="setKey()"
+              >
+                Set
+              </button>
+            </div>
           </div>
         </main>
       </div>
@@ -49,5 +89,6 @@
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
     ></script>
+    <script src="/base.js"></script>
   </body>
 </html>

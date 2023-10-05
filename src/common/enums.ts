@@ -2,6 +2,7 @@ export enum CommonConstants {
   LISTEN_PORT = 3000,
   TRUE_STRING = "true",
   CRONJOB_SUFFIX = "-CronJob",
+  REQUEST_HEADER = "X-Secret-Key",
 }
 
 export enum SwaggerConstants {

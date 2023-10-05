@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Secret-Key": localStorage.getItem("sk"),
         },
       });
       if (response && response.status == 201) {
