@@ -38,7 +38,9 @@ export const SCRAPER = (
 ) => `
 <tr>
   <th scope="row">${index + 1}</th>
-  <td>${scraper.name}</td>
+  <td><img src="${scraper.favicon}" height="16" width="16" />&nbsp;${
+    scraper.name
+  }</td>
   <td>${scraper.base}</td>
   <td>${schedule}</td>
   <td>

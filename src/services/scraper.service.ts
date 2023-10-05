@@ -23,7 +23,7 @@ export class ScraperService {
           root,
           config.links.fetching,
         );
-        if (!rootResponse || rootResponse.data) continue;
+        if (!rootResponse || !rootResponse.data) continue;
 
         const data = rootResponse.data as string;
         const links = ExtractService.links(data, config);
@@ -118,17 +118,19 @@ export class ScraperService {
     content: ScrapedContent,
   ): Promise<boolean> {
     try {
-      if (submitter.type == "request") {
-        const response = await axios.request({
-          method: submitter.method,
-          url: submitter.url,
-          headers: submitter.headers,
-          data: content,
-        });
-        return response.status.toString().startsWith("2");
-      } else if (submitter.type == "file") {
-        fs.writeFileSync(submitter.destination, JSON.stringify(content));
-        return true;
+      if (content.content && content.content.length > 0) {
+        if (submitter.type == "request") {
+          const response = await axios.request({
+            method: submitter.method,
+            url: submitter.url,
+            headers: submitter.headers,
+            data: content,
+          });
+          return response.status.toString().startsWith("2");
+        } else if (submitter.type == "file") {
+          fs.writeFileSync(submitter.destination, JSON.stringify(content));
+          return true;
+        }
       }
       return false;
     } catch {

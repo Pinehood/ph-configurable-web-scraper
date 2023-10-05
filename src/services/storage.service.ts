@@ -2,6 +2,7 @@ import * as fs from "fs";
 import {
   CollectionChangeAction,
   CollectionClearWhat,
+  CommonConstants,
   CronJobMeta,
   DataStorage,
   ScraperConfig,
@@ -38,6 +39,9 @@ export class StorageService {
           DATA_STORAGE.scrapers.findIndex((s) => s.name == scraper.name) > -1
         ) {
           return false;
+        }
+        if (!scraper.favicon || scraper.favicon.trim().length <= 0) {
+          scraper.favicon = CommonConstants.FAVICON;
         }
         DATA_STORAGE.scrapers.push(scraper);
       } else if (action == "remove" && typeof scraper == "string") {
@@ -157,7 +161,6 @@ export class StorageService {
           JSON.stringify({
             jobs: [],
             scrapers: [],
-            history: [],
           }),
         );
       }

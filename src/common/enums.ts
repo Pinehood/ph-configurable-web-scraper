@@ -3,6 +3,7 @@ export enum CommonConstants {
   TRUE_STRING = "true",
   CRONJOB_SUFFIX = "-CronJob",
   REQUEST_HEADER = "X-Secret-Key",
+  FAVICON = "https://cdn-icons-png.flaticon.com/256/992/992307.png",
 }
 
 export enum SwaggerConstants {

@@ -64,25 +64,31 @@ type ScraperConfig = {
 
 ## Example
 
-A simple TypeScript configuration object to scrape articles from Dnevno.hr news portal:
+A simple, working JSON configuration object to scrape articles from Dnevno.hr news portal:
 
-```typescript
-const DnevnoConfig: ScraperConfig = {
-  name: "Dnevno.hr News Portal",
-  base: "https://www.dnevno.hr",
-  favicon: "https://dnevno.hr/favicon.ico",
-  roots: [
+```json
+{
+  "name": "Dnevno.hr News Portal",
+  "base": "https://www.dnevno.hr",
+  "favicon": "https://dnevno.hr/favicon.ico",
+  "roots": [
     "https://www.dnevno.hr/category/vijesti",
     "https://www.dnevno.hr/category/sport",
+    "https://www.dnevno.hr/category/magazin",
+    "https://www.dnevno.hr/category/gospodarstvo-i-turizam",
+    "https://www.dnevno.hr/category/planet-x",
+    "https://www.dnevno.hr/category/zdravlje",
+    "https://www.dnevno.hr/category/domovina",
+    "https://www.dnevno.hr/category/vjera"
   ],
-  links: {
-    fetching: {
-      method: "GET",
+  "links": {
+    "fetching": {
+      "method": "GET"
     },
-    selector: "article.post a",
-    type: "html",
+    "selector": "article.post a",
+    "type": "html"
   },
-  remove: [
+  "remove": [
     "img",
     "iframe",
     "div.wpipa-container",
@@ -91,63 +97,59 @@ const DnevnoConfig: ScraperConfig = {
     "center",
     "blockquote",
     "figure",
-    "figcaption",
+    "figcaption"
   ],
-  scrape: [
-    { property: "title", selector: "h1" },
-    { property: "lead", selector: "a.title" },
+  "scrape": [
+    { "property": "title", "selector": "h1" },
+    { "property": "lead", "selector": "a.title" },
     {
-      property: "time",
-      selector: "time.date",
-      take: "first",
-      type: "text",
-      transfomers: [
+      "property": "time",
+      "selector": "time.date",
+      "take": "first",
+      "type": "text",
+      "transfomers": [
         {
-          type: "split",
-          value: ",",
-          index: 1,
+          "type": "split",
+          "value": ",",
+          "index": 1
         },
         {
-          type: "trim",
-        },
-      ],
+          "type": "trim"
+        }
+      ]
     },
     {
-      property: "author",
-      selector: "span.author",
-      take: "first",
-      transformers: [
+      "property": "author",
+      "selector": "span.author",
+      "take": "first",
+      "transformers": [
         {
-          type: "split",
-          value: "Autor:",
-          index: 1,
+          "type": "split",
+          "value": "Autor:",
+          "index": 1
         },
         {
-          type: "trim",
-        },
-      ],
+          "type": "trim"
+        }
+      ]
     },
     {
-      remove: [
+      "remove": [
         "div.img-holder",
         "div.heading",
         "h1",
         "style",
         "div.info",
-        "div.info-holder",
+        "div.info-holder"
       ],
-      property: "content",
-      selector: "section.description",
-      type: "html",
-    },
+      "property": "content",
+      "selector": "section.description",
+      "type": "html"
+    }
   ],
-  submit: {
-    type: "request",
-    url: "https://my-upload-endpoint.whatever.com/api/upload",
-    method: "POST",
-    headers: {
-      "X-Whatever-Header": "test123",
-    },
-  },
-};
+  "submit": {
+    "type": "file",
+    "destination": "./dnevno.json"
+  }
+}
 ```
